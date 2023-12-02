@@ -1,0 +1,317 @@
+<meta charset="UTF-8">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Гра в бокс</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 25vh;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+            padding: 50px;
+            font-weight: bold;
+        }
+
+        .button {
+            display: flex;
+            min-width: 200px;
+            margin: 10px;
+        }
+
+        .results{
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+            font-weight: bold;
+        }
+
+        .result {
+            margin-top: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        th, td {
+            width: 14.3%;
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: lightgray;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <table id="table">
+            <th colspan="7" style="text-align:center">Матриця виграшів:</th>
+            <tr>
+                <td></td>
+                <td>Фінт</td>
+                <td>Удар в голову</td>
+                <td>Удар в корпус</td>
+                <td>Захист голови</td>
+                <td>Захист корпусу</td>
+                <td>Ухил</td>
+            </tr>
+            <tr>
+                <td>Фінт</td>
+                <td>0</td>
+                <td>+1</td>
+                <td>+2</td>
+                <td>+4</td>
+                <td>+4</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Удар в голову</td>
+                <td>-1</td>
+                <td>0</td>
+                <td>+1</td>
+                <td>0</td>
+                <td>+3</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Удар в корпус</td>
+                <td>-2</td>
+                <td>-1</td>
+                <td>0</td>
+                <td>+2</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Захист голови</td>
+                <td>-4</td>
+                <td>-0</td>
+                <td>-2</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Захист корпусу</td>
+                <td>-4</td>
+                <td>-3</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Ухил</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+        </table>
+    </div>
+    <div class="container">
+        <div class="actions">
+            <div class="button">
+                <button onclick="alert('Фінтуй!!!')">Підказка тренера</button>
+            </div>
+            <div class="button">
+                <p>Виберіть дію:</p>
+            </div>
+            <div class="button">
+	            <button onclick="playerAction('Фінт')">Фiнт</button>
+            </div>
+            <div class="button">
+                <button onclick="playerAction('Удар в голову')">Удар в голову</button>
+            </div>
+            <div class="button">
+                <button onclick="playerAction('Удар в корпус')">Удар в корпус</button>
+            </div>
+            <div class="button">
+                <button onclick="playerAction('Захист голови')">Захист голови</button>
+            </div>
+            <div class="button">
+                <button onclick="playerAction('Захист корпусу')">Захист корпусу</button>
+            </div>
+            <div class="button">
+                <button onclick="playerAction('Ухил')">Ухил</button>
+            </div>
+        </div>
+        <div class="results">
+            <div class="result">
+                <p>Результат:</p>
+                <p id="score">Гравець 1: 0, Гравець 2: 0</p>
+            </div>
+            <div class="button">
+                <button onclick="newRound()">Почати новий раунд</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let player1Score = 0;
+        let player2Score = 0;
+        const actions = ['Фінт', 'Удар в голову', 'Удар в корпус', 'Захист голови', 'Захист корпусу', 'Ухил'];
+        let randomAction = '';
+        let lastCell;
+
+        function playerAction(action) {
+            if(lastCell) {
+                lastCell.style.backgroundColor = 'white';
+            }
+
+            randomAction = actions[Math.floor(Math.random() * actions.length)];
+
+            updateCount(action, randomAction);
+
+            highlightCell(action, randomAction);
+
+            alert('Гравець 2 виконує '+ randomAction);
+
+           setScore();
+
+            if (player1Score >= 20 || player2Score >= 20) {
+                    endGame();
+            }
+
+        }
+
+        function endGame() {
+            alert('Гру завершено!');
+            if(player1Score > player2Score) {
+                alert("Переміг перший гравець!");
+            }else{
+                alert("Переміг другий гравець!");
+            }
+            newRound();
+        }
+
+        function setScore(){
+            document.getElementById('score').innerText = `Гравець 1: ${player1Score}, Гравець 2: ${player2Score}`;
+        }
+
+        function updateCount(action, randomAction) {
+            if (action === 'Фінт') {
+                switch (randomAction) {
+                    case 'Фiнт':
+                        break;
+                    case 'Удар в голову':
+                        player1Score = player1Score + 1;
+                        break;
+                    case 'Удар в корпус':
+                        player1Score = player1Score + 2;
+                        break;
+                    case 'Захист голови':
+                    case 'Захист корпусу':
+                        player1Score = player1Score + 4;
+                        break
+                    case 'Ухил':
+                        break;
+                }
+            }
+            if (action === 'Удар в голову') {
+                switch (randomAction) {
+                    case 'Фінт':
+                        player2Score = player2Score + 1;
+                        break;
+                    case 'Удар в голову':
+                        break;
+                    case 'Удар в корпус':
+                        player1Score = player1Score + 1;
+                        break;
+                    case 'Захист голови':
+                        //посветить квадрат
+                        break;
+                    case 'Захист корпусу':
+                        player1Score = player1Score + 3;
+                        break
+                    case 'Ухил':
+                        break;
+                }
+            }
+            if (action === 'Удар в корпус') {
+                switch (randomAction) {
+                    case 'Фінт':
+                        player2Score = player2Score + 2;
+                        break;
+                    case 'Удар в голову':
+                        player2Score = player2Score + 1;
+                        break;
+                    case 'Удар в корпус':
+                        break;
+                    case 'Захист голови':
+                        player1Score = player1Score + 2;
+                        break;
+                    case 'Захист корпусу':
+                    case 'Ухил':
+                        break;
+                }
+            }
+            if (action === 'Захист голови') {
+                switch (randomAction) {
+                    case 'Фінт':
+                        player2Score = player2Score + 4;
+                        break;
+                    case 'Удар в голову':
+                        break;
+                    case 'Удар в корпус':
+                        player2Score = player2Score + 2;
+                        break;
+                    case 'Захист голови':
+                    case 'Захист корпусу':
+                    case 'Ухил':
+                        break;
+                }
+            }
+            if (action === 'Захист корпусу') {
+                switch (randomAction) {
+                    case 'Фінт':
+                        player2Score = player2Score + 4;
+                        break;
+                    case 'Удар в голову':
+                        player2Score = player2Score + 3;
+                        break;
+                    case 'Удар в корпус':
+                    case 'Захист голови':
+                    case 'Захист корпусу':
+                    case 'Ухил':
+                        break;
+                }
+            }
+        }
+
+        function highlightCell(action, randomAction) {
+            const actionIndex = actions.indexOf(action);
+            const randomActionIndex = actions.indexOf(randomAction);
+            lastCell = document.getElementById('table').rows[actionIndex+2].cells[randomActionIndex+1];
+            lastCell.style.backgroundColor = "red";
+        }
+
+        function newRound(){
+            player1Score = 0;
+            player2Score = 0;
+            setScore();
+            lastCell.style.background = "white";
+        }
+
+    </script>
+</body>
+</html>
